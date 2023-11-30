@@ -33,5 +33,19 @@ export class Neuron {
         output = this.activation_function(output + this.bias)
         return output
     }
+
+    /** 
+        *
+        *@param {number[]} input
+        *@returns {number[]}
+        * */
+    get_sum(input) {
+        let output = 0
+        for (let i = 0; i < this.weights.length; i++) {
+            output += this.weights[i] * input[i]
+        }
+        let output2 = this.activation_function(output + this.bias)
+        return [output, output2]
+    }
 }
 

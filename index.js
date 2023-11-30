@@ -7,7 +7,8 @@ import { Setting, create_layers } from "./misc/create_layers.js"
 
 let settings = []
 
-let setting_one = new Setting(2, 3)
+
+let setting_one = new Setting(2, 2)
 
 let setting_two = new Setting(1, 2)
 
@@ -21,7 +22,8 @@ let network = new Network(layers)
 
 let input = [1, 2, 3]
 
+network.backprop(5, input)
+
 let res = network.feedfoward(input)
 
 console.log(res)
-
