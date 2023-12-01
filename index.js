@@ -2,39 +2,29 @@
 
 import { Network } from "./classes/network.js"
 import { Neuron } from "./classes/neuron.js"
+import { load_data } from "./data.js"
 import { Setting, create_layers } from "./misc/create_layers.js"
 
 
 
 let settings = []
 
+let [answers, inputs] = load_data()
 
-let setting_one = new Setting(1, 3)
+let setting_one = new Setting(15, 784)
 
-let setting_two = new Setting(1, 1)
+let setting_two = new Setting(10, 15)
 
 settings.push(setting_one)
 
 settings.push(setting_two)
 
-let bias = 1
-
-let neuron = new Neuron([0.5, 0.5, 0.5], bias)
-let layer_one = [neuron]
-
-let neuron_two = new Neuron([0.5], bias)
-let layer_two = [neuron_two]
-
-let all_layers = [layer_one, layer_two]
 
 let layers = create_layers(settings)
 
-let network = new Network(all_layers, 0.1)
-let input = [[0, 0, 1], [0, 1, 1], [1, 0, 1], [1, 1, 1]]
+let network = new Network(layers, 0.1)
 
-let ans = [[0], [1], [1], [0]]
-
-network.gradient_descent(input, ans, 10000)
+network.gradient_descent(inputs, answers, 500)
 
 
 

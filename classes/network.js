@@ -1,5 +1,6 @@
 //@ts-check
 
+import { readFileSync, writeFileSync } from "fs";
 import { derived_sigmoid, error_arr, mean_err_arr } from "../maths/math_funcs.js";
 import { Neuron } from "./neuron.js";
 
@@ -68,15 +69,6 @@ export class Network {
             let layer = this.layers[a]
             let pre_layer = summed[a - 1]
             let temp_next_vals = []
-            if (this.debug) {
-                if (a == 0) {
-                    console.log("Input layer")
-                }
-
-                if (a == 1) {
-                    console.log("Output layer")
-                }
-            }
             for (let b = layer.length - 1; b > -1; b--) {
                 let neuron = this.layers[a][b]
 
@@ -127,21 +119,38 @@ export class Network {
     gradient_descent(inputs, answers, cycles) {
         for (let cycle = 0; cycle < cycles; cycle++) {
             let temp_answers = []
+            console.log(cycle)
             for (let i = 0; i < inputs.length; i++) {
                 let res = this.feedfoward(inputs[i])
                 let { data, answer } = res
                 let err = error_arr(answer, answers[i])
-                if (cycle == 0 && i == 0) {
-                }
                 temp_answers.push(answer)
                 this.debug = cycle == 0
                 this.backprop(err, inputs[i], data)
             }
-            if (cycle % 100 == 0) {
+            if (cycle % 10 == 0) {
+                let layers = []
+                for (let i = 0; i < this.layers.length; i++) {
+                    let sub_arr = []
+                    for (let x = 0; x < this.layers[i].length; x++) {
+                        sub_arr.push({ weight: this.layers[i][x].weights, bias: this.layers[i][x].bias })
+                    }
+                    layers.push(sub_arr)
+                }
+                let json_obj = { data: layers }
+                let json_string = JSON.stringify(json_obj)
+                writeFileSync("weight.json", json_string)
                 let new_err = mean_err_arr(answers, temp_answers)
                 console.log("Cycle: [" + cycle + "]\nErr: [" + new_err + "]\n")
 
             }
         }
+    }
+    /** 
+        *@param {string} path
+        * */
+    load_weights(path) {
+        let content = readFileSync(path).toJSON()
+        console.log(content.data)
     }
 }
