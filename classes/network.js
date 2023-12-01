@@ -68,9 +68,18 @@ export class Network {
             let layer = this.layers[a]
             let pre_layer = summed[a - 1]
             let temp_next_vals = []
+            if (this.debug) {
+                if (a == 0) {
+                    console.log("Input layer")
+                }
 
+                if (a == 1) {
+                    console.log("Output layer")
+                }
+            }
             for (let b = layer.length - 1; b > -1; b--) {
                 let neuron = this.layers[a][b]
+
                 let derived_out = derived_sigmoid(summed[a][b])
                 let next_arr = []
                 let pre_val = pre_vals[b] ? pre_vals[b] : err[b]
@@ -122,6 +131,8 @@ export class Network {
                 let res = this.feedfoward(inputs[i])
                 let { data, answer } = res
                 let err = error_arr(answer, answers[i])
+                if (cycle == 0 && i == 0) {
+                }
                 temp_answers.push(answer)
                 this.debug = cycle == 0
                 this.backprop(err, inputs[i], data)

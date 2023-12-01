@@ -44,6 +44,7 @@ export class Neuron {
         for (let i = 0; i < this.weights.length; i++) {
             output += this.weights[i] * input[i]
         }
+        output += this.bias
         let output2 = this.activation_function(output + this.bias)
         return [output, output2]
     }
